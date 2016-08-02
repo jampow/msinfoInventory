@@ -8,7 +8,8 @@ const regx = {
 };
 
 const regxdt = {
-	osName: /Sistema Operacional(.*)/,
+	osName: /nome do sistema operacional\t([^\t]+)/i,
+	cpu: /processador\t(.+)\t/i,
 	[Symbol.iterator]: function *() {
 		var own = Object.getOwnPropertyNames(this),
 		prop;
@@ -19,29 +20,30 @@ const regxdt = {
 	}
 };
 
-console.log([...regxdt]);
-
 fs.readFile('msinfo-reports/CPDJO-tcp.txt', function(err, content){
-	var content = iconv.decode(content, 'win1252');
+	var content = iconv.decode(content, 'win1252')
+		.replace(/\0/g, '');
 
 	var lines = content.split('\n');
+
+	var rules = [...regxdt];
+	console.log(rules);
+	var rule = rules.pop();
 
 	lines.forEach(function(line){
 		
 		var emptyLine = line.match(regx.emptyLine);
 
-		if(emptyLine)
-			console.log('empty');
-			//return;
+		if(emptyLine) return;
 
-		var header = line.match(regx.header);
+		var mtch = line.match(regxdt[rule]);
 
-		if(header)
-			console.log(line);
-		else
-			if(line.length == 3 && line.split(/\t/).length == 1)
-				console.log(line.charCodeAt(0),line.charCodeAt(1),line.charCodeAt(2));
-				//console.log(line);
+		if(mtch){
+			console.log(mtch);
+
+			if(rules.length > 0)
+				rule = rules.pop();
+		}
 
 	});
 
