@@ -1,3 +1,4 @@
 msinfo-reports
 *.swp
 node_modules
+localStorage
