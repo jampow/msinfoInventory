@@ -7,6 +7,20 @@ const regx = {
 	emptyLine: /^\u0000\u00013\u0000/
 };
 
+const regxdt = {
+	osName: /Sistema Operacional(.*)/,
+	[Symbol.iterator]: function *() {
+		var own = Object.getOwnPropertyNames(this),
+		prop;
+
+		while(prop = own.pop()) {
+			yield prop;
+		}
+	}
+};
+
+console.log([...regxdt]);
+
 fs.readFile('msinfo-reports/CPDJO-tcp.txt', function(err, content){
 	var content = iconv.decode(content, 'win1252');
 
