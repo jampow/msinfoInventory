@@ -9,6 +9,7 @@ const regx = {
 
 const regxdt = {
 	osName: /nome do sistema operacional\t(.+)\t/i,
+	pcName: /nome do sistema\t(.+)\t/i,
 	cpu: /processador\t(.+)\t/i,
 	[Symbol.iterator]: function *() {
 		var own = Object.getOwnPropertyNames(this),
